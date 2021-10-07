@@ -7,4 +7,5 @@ out/**/*
 *.ipr
 *.iws
 **/*/logs/**/*
+venv/**/*
 
