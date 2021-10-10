@@ -5,6 +5,7 @@ from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 from thrift.server import TServer
 
+
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
