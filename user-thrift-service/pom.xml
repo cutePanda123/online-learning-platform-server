@@ -9,14 +9,18 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>user-thrift-service-api</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>user-thrift-service</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.thrift</groupId>
             <artifactId>libthrift</artifactId>
             <version>0.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.panda</groupId>
+            <artifactId>user-thrift-service-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
