@@ -1,3 +1,3 @@
 # online-learning-platform-server
 
-To Do: add architecture design diagram
+To Do: add the architecture design diagram to the repo. 
