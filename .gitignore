@@ -8,5 +8,5 @@ out/**/*
 *.iws
 **/*/logs/**/*
 venv/**/*
-database/data/**/*
+data/data/**/*
 
