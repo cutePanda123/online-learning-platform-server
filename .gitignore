@@ -9,4 +9,5 @@ out/**/*
 **/*/logs/**/*
 venv/**/*
 data/data/**/*
+data/redis/data/**/*
 
