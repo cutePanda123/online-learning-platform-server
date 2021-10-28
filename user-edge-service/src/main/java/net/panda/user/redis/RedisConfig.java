@@ -32,7 +32,6 @@ public class RedisConfig extends CachingConfigurerSupport {
     @Value("${spring.redis.timeout}")
     private int timeout;
 
-    //缓存管理器
     @Bean
     public CacheManager cacheManager(JedisConnectionFactory redisConnectionFactory) {
         RedisSerializer<String> redisSerializer = new StringRedisSerializer();
