@@ -4,6 +4,7 @@ import net.panda.thrift.user.UserInfo;
 import net.panda.user.dto.UserDTO;
 import net.panda.user.redis.RedisClient;
 import net.panda.user.response.LoginResponse;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,26 @@ public class UserController {
 
         redisClient.set(token, toDTO(userInfo), 3600);
         return new LoginResponse(token);
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public Response register(@RequestParam("username") String username,
+                             @RequestParam("password") String password,
+                             @RequestParam(value = "mobile", required = false) String mobile,
+                             @RequestParam(value = "email", required = false) String email,
+                             @RequestParam("verifyCode") String verifyCode) {
+
+    }
+
+    public Response sendVerifyCode(@RequestParam(value = "mobile", required = false) String mobile,
+                                   @RequestParam(value = "email", required = false) String email) {
+        if (StringUtils.isNotBlank(mobile)) {
+
+        } else if (StringUtils.isNotBlank(email)) {
+
+        } else {
+            return Response.MOBILE_OR_EMAIL_ERROR;
+        }
     }
 
     private UserDTO toDTO(UserInfo userInfo) {

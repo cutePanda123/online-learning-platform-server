@@ -16,7 +16,26 @@ public class ServiceProvider {
     @Value("${thrift.user.port}")
     private int serverPort;
 
+    @Value("${thrift.message.ip}")
+    private String messageServerIp;
+    @Value("${thrift.user.port}")
+    private int messageServerPort;
+
     public UserService.Client getUserService() {
+        TSocket socket = new TSocket(serverIp, serverPort, 3000);
+        TTransport transport = new TFramedTransport(socket);
+        try {
+            transport.open();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        TProtocol protocol = new TBinaryProtocol(transport);
+        UserService.Client client = new UserService.Client(protocol);
+        return client;
+    }
+
+    public MessageSer.Client getUserService() {
         TSocket socket = new TSocket(serverIp, serverPort, 3000);
         TTransport transport = new TFramedTransport(socket);
         try {

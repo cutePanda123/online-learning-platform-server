@@ -10,4 +10,5 @@ out/**/*
 venv/**/*
 data/data/**/*
 data/redis/data/**/*
+database/data/**/*
 
