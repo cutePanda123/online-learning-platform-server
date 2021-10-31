@@ -2,6 +2,7 @@ package net.panda.user.thrift;
 
 import net.panda.thrift.message.MessageService;
 import net.panda.thrift.user.UserService;
+import org.apache.thrift.TServiceClient;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TFramedTransport;
@@ -22,22 +23,21 @@ public class ServiceProvider {
     @Value("${thrift.user.port}")
     private int messageServerPort;
 
+    private enum ServiceType {
+        USER,
+        MESSAGE
+    }
+
     public UserService.Client getUserService() {
-        TSocket socket = new TSocket(serverIp, serverPort, 3000);
-        TTransport transport = new TFramedTransport(socket);
-        try {
-            transport.open();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        TProtocol protocol = new TBinaryProtocol(transport);
-        UserService.Client client = new UserService.Client(protocol);
-        return client;
+        return getService(serverIp, serverPort, ServiceType.USER);
     }
 
     public MessageService.Client getMessageService() {
-        TSocket socket = new TSocket(messageServerIp, messageServerPort, 3000);
+        return getService(messageServerIp, messageServerPort, ServiceType.MESSAGE);
+    }
+
+    private <T> T getService(String ip, int port, ServiceType type) {
+        TSocket socket = new TSocket(ip, port, 3000);
         TTransport transport = new TFramedTransport(socket);
         try {
             transport.open();
@@ -45,8 +45,18 @@ public class ServiceProvider {
             e.printStackTrace();
             return null;
         }
+        TServiceClient client = null;
         TProtocol protocol = new TBinaryProtocol(transport);
-        MessageService.Client client = new MessageService.Client(protocol);
-        return client;
+        switch (type) {
+            case USER:
+                client = new UserService.Client(protocol);
+                break;
+            case MESSAGE:
+                client = new MessageService.Client(protocol);
+                break;
+            default:
+                throw new IllegalArgumentException("wrong service type");
+        }
+        return (T)client;
     }
 }

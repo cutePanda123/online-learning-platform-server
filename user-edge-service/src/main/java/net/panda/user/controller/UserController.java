@@ -5,6 +5,7 @@ import net.panda.user.dto.UserDTO;
 import net.panda.user.redis.RedisClient;
 import net.panda.user.response.LoginResponse;
 import org.apache.commons.lang.StringUtils;
+import org.apache.thrift.TException;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import net.panda.user.thrift.ServiceProvider;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.MessageDigest;
+import java.util.Random;
 import java.util.UUID;
 
 @RestController
@@ -57,15 +59,33 @@ public class UserController {
 
     }
 
-    public Response sendVerifyCode(@RequestParam(value = "mobile", required = false) String mobile,
+    @RequestMapping(value = "/sendVerificationCode", method = RequestMethod.POST)
+    public Response sendVerificationCode(@RequestParam(value = "mobile", required = false) String mobile,
                                    @RequestParam(value = "email", required = false) String email) {
-        if (StringUtils.isNotBlank(mobile)) {
-
-        } else if (StringUtils.isNotBlank(email)) {
-
-        } else {
-            return Response.MOBILE_OR_EMAIL_ERROR;
+        String message = "verification code is: ";
+        String code = randomCode("0123456789", 6);
+        boolean result = true;
+        try {
+            if (StringUtils.isNotBlank(mobile)) {
+                result = serviceProvider.getMessageService().sendTextMessage(mobile, message + code);
+                if (!result) {
+                    return Response.SEND_VERIFICATION_CODE_ERROR;
+                }
+                redisClient.set(mobile, code);
+            } else if (StringUtils.isNotBlank(email)) {
+                result = serviceProvider.getMessageService().sendEmailMessage(email, message + code);
+                if (!result) {
+                    return Response.SEND_VERIFICATION_CODE_ERROR;
+                }
+                redisClient.set(email, code);
+            } else {
+                return Response.MOBILE_OR_EMAIL_ERROR;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.exception(e);
         }
+        return Response.SUCCESS;
     }
 
     private UserDTO toDTO(UserInfo userInfo) {
@@ -83,5 +103,16 @@ public class UserController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private String randomCode(String s, int size) {
+        StringBuilder result = new StringBuilder(size);
+
+        Random random = new Random();
+        for(int i=0;i<size;i++) {
+            int loc = random.nextInt(s.length());
+            result.append(s.charAt(loc));
+        }
+        return result.toString();
     }
 }
