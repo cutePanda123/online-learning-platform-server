@@ -1,5 +1,6 @@
 package net.panda.user.thrift;
 
+import net.panda.thrift.message.MessageService;
 import net.panda.thrift.user.UserService;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
@@ -35,8 +36,8 @@ public class ServiceProvider {
         return client;
     }
 
-    public MessageSer.Client getUserService() {
-        TSocket socket = new TSocket(serverIp, serverPort, 3000);
+    public MessageService.Client getMessageService() {
+        TSocket socket = new TSocket(messageServerIp, messageServerPort, 3000);
         TTransport transport = new TFramedTransport(socket);
         try {
             transport.open();
@@ -45,7 +46,7 @@ public class ServiceProvider {
             return null;
         }
         TProtocol protocol = new TBinaryProtocol(transport);
-        UserService.Client client = new UserService.Client(protocol);
+        MessageService.Client client = new MessageService.Client(protocol);
         return client;
     }
 }
