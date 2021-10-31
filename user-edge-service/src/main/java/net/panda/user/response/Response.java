@@ -12,6 +12,7 @@ public class Response implements Serializable {
     public static final Response MOBILE_OR_EMAIL_ERROR = new Response("1002", "mobile or email is not correct");
     public static final Response SEND_VERIFICATION_CODE_ERROR = new Response("1003", "send verification code failure");
     public static final Response SUCCESS = new Response();
+    public static final Response INVALUD_VERIFICATION_CODE_ERROR = new Response("1004", "invalid verification code");
     private String code;
     private String message;
 

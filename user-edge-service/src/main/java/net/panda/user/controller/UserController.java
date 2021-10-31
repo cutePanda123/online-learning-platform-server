@@ -55,8 +55,26 @@ public class UserController {
                              @RequestParam("password") String password,
                              @RequestParam(value = "mobile", required = false) String mobile,
                              @RequestParam(value = "email", required = false) String email,
-                             @RequestParam("verifyCode") String verifyCode) {
-
+                             @RequestParam("verifyCode") String verificationCode) {
+        if (StringUtils.isBlank(mobile) && StringUtils.isBlank(email)) {
+            return Response.MOBILE_OR_EMAIL_ERROR;
+        }
+        String cachedCode = StringUtils.isNotBlank(mobile) ? redisClient.get(mobile) : redisClient.get(email);
+        if (!cachedCode.equals(verificationCode)) {
+            return Response.INVALUD_VERIFICATION_CODE_ERROR;
+        }
+        UserInfo userInfo = new UserInfo();
+        userInfo.setEmail(email);
+        userInfo.setMobile(mobile);
+        userInfo.setPassword(md5(password));
+        userInfo.setUsername(username);
+        try {
+            serviceProvider.getUserService().registerUser(userInfo);
+        } catch (TException e) {
+            e.printStackTrace();
+            return Response.exception(e);
+        }
+        return Response.SUCCESS;
     }
 
     @RequestMapping(value = "/sendVerificationCode", method = RequestMethod.POST)
