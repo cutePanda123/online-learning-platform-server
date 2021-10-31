@@ -49,8 +49,9 @@ public class MessageService {
 
         public boolean sendTextMessage(java.lang.String phone, java.lang.String message) throws org.apache.thrift.TException
         {
-            send_sendTextMessage(phone, message);
-            return recv_sendTextMessage();
+            return true;
+            /*send_sendTextMessage(phone, message);
+            return recv_sendTextMessage();*/
         }
 
         public void send_sendTextMessage(java.lang.String phone, java.lang.String message) throws org.apache.thrift.TException
@@ -73,8 +74,10 @@ public class MessageService {
 
         public boolean sendEmailMessage(java.lang.String email, java.lang.String message) throws org.apache.thrift.TException
         {
+            return true;
+            /*
             send_sendEmailMessage(email, message);
-            return recv_sendEmailMessage();
+            return recv_sendEmailMessage();*/
         }
 
         public void send_sendEmailMessage(java.lang.String email, java.lang.String message) throws org.apache.thrift.TException
