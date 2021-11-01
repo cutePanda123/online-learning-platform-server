@@ -55,7 +55,7 @@ public class UserController {
                              @RequestParam("password") String password,
                              @RequestParam(value = "mobile", required = false) String mobile,
                              @RequestParam(value = "email", required = false) String email,
-                             @RequestParam("verifyCode") String verificationCode) {
+                             @RequestParam("verificationCode") String verificationCode) {
         if (StringUtils.isBlank(mobile) && StringUtils.isBlank(email)) {
             return Response.MOBILE_OR_EMAIL_ERROR;
         }
@@ -103,6 +103,7 @@ public class UserController {
             e.printStackTrace();
             return Response.exception(e);
         }
+        System.out.println("mobile: " + mobile + ", email: " + email + ", code: " + code);
         return Response.SUCCESS;
     }
 
