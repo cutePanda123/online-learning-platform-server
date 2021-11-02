@@ -1,4 +1,4 @@
-package net.panda.user.dto;
+package net.panda.thrift.user.dto;
 
 import lombok.Data;
 
