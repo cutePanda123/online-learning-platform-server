@@ -1,7 +1,7 @@
 package net.panda.user.controller;
 
 import net.panda.thrift.user.UserInfo;
-import net.panda.user.dto.UserDTO;
+import net.panda.thrift.user.dto.UserDTO;
 import net.panda.user.redis.RedisClient;
 import net.panda.user.response.LoginResponse;
 import org.apache.commons.lang.StringUtils;
@@ -9,18 +9,16 @@ import org.apache.thrift.TException;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import net.panda.user.response.Response;
 import net.panda.user.thrift.ServiceProvider;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.security.MessageDigest;
 import java.util.Random;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private ServiceProvider serviceProvider;
@@ -105,6 +103,11 @@ public class UserController {
         }
         System.out.println("mobile: " + mobile + ", email: " + email + ", code: " + code);
         return Response.SUCCESS;
+    }
+
+    @RequestMapping(value = "/authentication", method = RequestMethod.POST)
+    public UserDTO authentication(@RequestHeader(value = "token") String token) {
+        return redisClient.get(token);
     }
 
     private UserDTO toDTO(UserInfo userInfo) {
