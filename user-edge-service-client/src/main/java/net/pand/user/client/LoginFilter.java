@@ -1,5 +1,6 @@
 package net.pand.user.client;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.panda.thrift.user.dto.UserDTO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
@@ -13,6 +14,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class LoginFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -34,8 +36,14 @@ public class LoginFilter implements Filter {
                 }
             }
         }
+        UserDTO userDTO = null;
         if (StringUtils.isNotBlank(token)) {
-            UserDTO userDTO = requestUserInfo(token);
+            userDTO = requestUserInfo(token);
+        }
+
+        if (userDTO == null) {
+            httpServletResponse.sendRedirect("http://localhost:8002/user/login");
+            return;
         }
     }
 
@@ -44,13 +52,31 @@ public class LoginFilter implements Filter {
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(url);
         post.addHeader("token", token);
+        InputStream inputStream = null;
         try {
             HttpResponse response = client.execute(post);
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-
+                throw  new RuntimeException("request user info failed. status code: " + response.getStatusLine().getStatusCode());
             }
+            inputStream = response.getEntity().getContent();
+            byte[] temp = new byte[1024];
+            StringBuffer sb = new StringBuffer();
+            int len = 0;
+            while ((len = inputStream.read(temp)) > 0) {
+                sb.append(new String(temp, 0, len));
+            }
+            UserDTO userDTO = new ObjectMapper().readValue(sb.toString(), UserDTO.class);
+            return userDTO;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return null;
     }
