@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class LoginFilter implements Filter {
+public abstract class LoginFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
 
     }
@@ -45,7 +45,13 @@ public class LoginFilter implements Filter {
             httpServletResponse.sendRedirect("http://localhost:8002/user/login");
             return;
         }
+
+        postLogin(httpServletRequest, httpServletResponse, userDTO);
+
+        chain.doFilter(httpServletRequest, httpServletResponse);
     }
+
+    protected abstract void postLogin(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, UserDTO userDTO);
 
     private UserDTO requestUserInfo(String token) {
         String url = "http://localhost:8082/user/authentication";
