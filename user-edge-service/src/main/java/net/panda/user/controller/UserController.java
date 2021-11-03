@@ -9,6 +9,7 @@ import org.apache.thrift.TException;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import net.panda.user.response.Response;
 import net.panda.user.thrift.ServiceProvider;
@@ -17,7 +18,7 @@ import java.security.MessageDigest;
 import java.util.Random;
 import java.util.UUID;
 
-@RestController
+@Controller
 @RequestMapping("/user")
 public class UserController {
     @Autowired
@@ -28,10 +29,11 @@ public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
-        return "/login";
+        return "login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
     public Response login(@RequestParam("username") String username,
                       @RequestParam("password") String password) {
         UserInfo userInfo = null;
@@ -54,6 +56,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @ResponseBody
     public Response register(@RequestParam("username") String username,
                              @RequestParam("password") String password,
                              @RequestParam(value = "mobile", required = false) String mobile,
@@ -81,6 +84,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/sendVerificationCode", method = RequestMethod.POST)
+    @ResponseBody
     public Response sendVerificationCode(@RequestParam(value = "mobile", required = false) String mobile,
                                    @RequestParam(value = "email", required = false) String email) {
         String message = "verification code is: ";
@@ -111,6 +115,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/authentication", method = RequestMethod.POST)
+    @ResponseBody
     public UserDTO authentication(@RequestHeader(value = "token") String token) {
         return redisClient.get(token);
     }
