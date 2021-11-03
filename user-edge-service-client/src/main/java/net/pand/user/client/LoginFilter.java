@@ -1,6 +1,8 @@
 package net.pand.user.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import net.panda.thrift.user.dto.UserDTO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
@@ -15,8 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 public abstract class LoginFilter implements Filter {
+    private static Cache<String, UserDTO> cache = CacheBuilder.newBuilder()
+            .maximumSize(10000)
+            .expireAfterWrite(3, TimeUnit.MINUTES)
+            .build();
+
     public void init(FilterConfig filterConfig) throws ServletException {
 
     }
@@ -38,13 +46,18 @@ public abstract class LoginFilter implements Filter {
         }
         UserDTO userDTO = null;
         if (StringUtils.isNotBlank(token)) {
-            userDTO = requestUserInfo(token);
+            userDTO = cache.getIfPresent(token);
+            if (userDTO == null) {
+                userDTO = requestUserInfo(token);
+            }
         }
 
         if (userDTO == null) {
             httpServletResponse.sendRedirect("http://localhost:8002/user/login");
             return;
         }
+
+        cache.put(token, userDTO);
 
         postLogin(httpServletRequest, httpServletResponse, userDTO);
 
