@@ -49,6 +49,9 @@ public abstract class LoginFilter implements Filter {
             userDTO = cache.getIfPresent(token);
             if (userDTO == null) {
                 userDTO = requestUserInfo(token);
+                if (userDTO != null) {
+                    cache.put(token, userDTO);
+                }
             }
         }
 
@@ -56,8 +59,6 @@ public abstract class LoginFilter implements Filter {
             httpServletResponse.sendRedirect("http://localhost:8002/user/login");
             return;
         }
-
-        cache.put(token, userDTO);
 
         postLogin(httpServletRequest, httpServletResponse, userDTO);
 
