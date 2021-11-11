@@ -4,6 +4,7 @@ import net.panda.course.dto.CourseDTO;
 import net.panda.course.mapper.CourseMapper;
 import net.panda.thrift.user.UserInfo;
 import net.panda.thrift.user.dto.TeacherDTO;
+import org.apache.thrift.TException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,13 @@ public class CourseServiceImpl implements ICourseService{
         for (CourseDTO courseDTO : courseDTOList) {
             Integer teacherId = courseMapper.getCourseTeacher(courseDTO.getId());
             if (teacherId != null) {
-                UserInfo userInfo = serviceProvider.getUserService().getTeacherById(teacherId);
+                UserInfo userInfo = null;
+                try {
+                    userInfo = serviceProvider.getUserService().getTeacherById(teacherId);
+                } catch (TException e) {
+                    e.printStackTrace();
+                    return null;
+                }
                 courseDTO.setTeacher(trans2Teacher(userInfo));
             }
         }

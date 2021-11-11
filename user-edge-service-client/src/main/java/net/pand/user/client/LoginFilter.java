@@ -31,7 +31,7 @@ public abstract class LoginFilter implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest)request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse)request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse)response;
 
         String token = request.getParameter("token");
         if (StringUtils.isBlank(token)) {
@@ -56,7 +56,7 @@ public abstract class LoginFilter implements Filter {
         }
 
         if (userDTO == null) {
-            httpServletResponse.sendRedirect("http://localhost:8002/user/login");
+            httpServletResponse.sendRedirect("http://localhost:8082/user/login");
             return;
         }
 
