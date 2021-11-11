@@ -21,7 +21,7 @@ public class ServiceApplication {
         CourseFilter courseFilter = new CourseFilter();
         filterRegistrationBean.setFilter(courseFilter);
 
-        List<String> urlPatterns = new LinkedList<>();
+        List<String> urlPatterns = new LinkedList<String>();
         urlPatterns.add("/*");
         filterRegistrationBean.setUrlPatterns(urlPatterns);
         return filterRegistrationBean;
