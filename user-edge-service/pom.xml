@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>net.panda</groupId>
     <artifactId>user-edge-service</artifactId>
 
     <dependencies>
