@@ -1,4 +1,4 @@
-package net.pand.course.filter;
+package net.panda.course.filter;
 
 import net.pand.user.client.LoginFilter;
 import net.panda.thrift.user.dto.UserDTO;

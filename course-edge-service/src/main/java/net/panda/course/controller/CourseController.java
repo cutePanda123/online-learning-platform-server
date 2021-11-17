@@ -1,4 +1,4 @@
-package net.pand.course.controller;
+package net.panda.course.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import net.panda.course.dto.CourseDTO;

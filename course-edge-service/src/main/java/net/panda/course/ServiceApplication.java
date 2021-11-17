@@ -1,6 +1,6 @@
-package net.pand.course;
+package net.panda.course;
 
-import net.pand.course.filter.CourseFilter;
+import net.panda.course.filter.CourseFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
