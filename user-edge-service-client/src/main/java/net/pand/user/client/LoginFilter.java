@@ -56,7 +56,7 @@ public abstract class LoginFilter implements Filter {
         }
 
         if (userDTO == null) {
-            httpServletResponse.sendRedirect("http://localhost:8082/user/login");
+            httpServletResponse.sendRedirect("http://localhost:8084/user/login");
             return;
         }
 
