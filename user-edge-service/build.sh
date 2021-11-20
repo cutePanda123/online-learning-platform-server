@@ -2,6 +2,6 @@
 
 mvn package
 
-docker build -t user-service:latest .
+docker build -t user-edge-service:latest .
 
-docker run -it user-service:latest --mysql.address=LOCAL-PRIVATE-IP
+docker run -it user-edge-service:latest --redis.address=LOCAL-PRIVATE-IP
