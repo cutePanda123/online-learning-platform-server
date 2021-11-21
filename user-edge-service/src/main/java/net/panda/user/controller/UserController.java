@@ -65,7 +65,7 @@ public class UserController {
         if (StringUtils.isBlank(mobile) && StringUtils.isBlank(email)) {
             return Response.MOBILE_OR_EMAIL_ERROR;
         }
-        String cachedCode = StringUtils.isNotBlank(mobile) ? redisClient.get(mobile) : redisClient.get(email);
+        String cachedCode = (String)(StringUtils.isNotBlank(mobile) ? redisClient.get(mobile) : redisClient.get(email));
         if (!cachedCode.equals(verificationCode)) {
             return Response.INVALUD_VERIFICATION_CODE_ERROR;
         }
