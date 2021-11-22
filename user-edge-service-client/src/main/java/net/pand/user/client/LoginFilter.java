@@ -56,7 +56,7 @@ public abstract class LoginFilter implements Filter {
         }
 
         if (userDTO == null) {
-            httpServletResponse.sendRedirect("http://localhost:8084/user/login");
+            httpServletResponse.sendRedirect("http://user-edge-service:8084/user/login");
             return;
         }
 
@@ -68,7 +68,7 @@ public abstract class LoginFilter implements Filter {
     protected abstract void postLogin(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, UserDTO userDTO);
 
     private UserDTO requestUserInfo(String token) {
-        String url = "http://localhost:8082/user/authentication";
+        String url = "http://user-edge-service:8082/user/authentication";
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(url);
         post.addHeader("token", token);
