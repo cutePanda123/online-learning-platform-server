@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  user-service:
+    image: user-service:latest
+    command:
+      - "--mysql.address=192.168.29.111"
+
+  user-edge-service:
+    image: user-edge-service:latest
+    links:
+      - user-service
+    command:
+      - "--redis.address=192.168.29.111"
+
+  course-service:
+    image: course-edge-service:latest
+    links:
+      - user-service
+    command:
+      - "--zookeeper.address=192.168.29.111"
+
+  course-edge-service:
+      image: course-edge-service:latest
+      links:
+        - user-edge-service
+      command:
+        - "--zookeeper.address=192.168.29.111"
+
+  api-gateway-zuul:
+    image: api-gateway-zuul:latest
+    links:
+      - user-edge-service
+      - course-edge-service
+    ports:
+      - 8080:8080
