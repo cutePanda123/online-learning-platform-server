@@ -1,4 +1,4 @@
-package net.pand.user.client;
+package net.panda.user.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.Cache;

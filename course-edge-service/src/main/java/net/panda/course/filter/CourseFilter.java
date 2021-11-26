@@ -1,6 +1,6 @@
 package net.panda.course.filter;
 
-import net.pand.user.client.LoginFilter;
+import net.panda.user.client.LoginFilter;
 import net.panda.thrift.user.dto.UserDTO;
 
 import javax.servlet.http.HttpServletRequest;
