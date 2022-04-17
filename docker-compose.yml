@@ -18,6 +18,7 @@ services:
     links:
       - user-service
     command:
+      - "--mysql.address=192.168.29.111"
       - "--zookeeper.address=192.168.29.111"
 
   course-edge-service:
