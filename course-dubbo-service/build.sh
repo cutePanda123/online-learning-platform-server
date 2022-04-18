@@ -4,4 +4,4 @@ mvn package
 
 docker build -t course-dubbo-service:latest .
 
-docker run -it course-dubbo-service:latest --mysql.address=LOCAL-PRIVATE-IP
+docker run -it course-dubbo-service:latest --mysql.address=LOCAL-PRIVATE-IP --zookeeper.address=LOCAL-PRIVATE-IP
